@@ -14,16 +14,332 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      copy_assets: {
+        Row: {
+          content: string | null
+          created_at: string | null
+          id: string
+          launch_id: string
+          media_url: string | null
+          status: Database["public"]["Enums"]["copy_status"] | null
+          title: string
+          type: Database["public"]["Enums"]["message_type"]
+        }
+        Insert: {
+          content?: string | null
+          created_at?: string | null
+          id?: string
+          launch_id: string
+          media_url?: string | null
+          status?: Database["public"]["Enums"]["copy_status"] | null
+          title: string
+          type: Database["public"]["Enums"]["message_type"]
+        }
+        Update: {
+          content?: string | null
+          created_at?: string | null
+          id?: string
+          launch_id?: string
+          media_url?: string | null
+          status?: Database["public"]["Enums"]["copy_status"] | null
+          title?: string
+          type?: Database["public"]["Enums"]["message_type"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "copy_assets_launch_id_fkey"
+            columns: ["launch_id"]
+            isOneToOne: false
+            referencedRelation: "launches"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      launches: {
+        Row: {
+          created_at: string | null
+          id: string
+          launch_code: string
+          name: string
+          status: Database["public"]["Enums"]["launch_status"] | null
+          workspace_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          launch_code: string
+          name: string
+          status?: Database["public"]["Enums"]["launch_status"] | null
+          workspace_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          launch_code?: string
+          name?: string
+          status?: Database["public"]["Enums"]["launch_status"] | null
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "launches_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      leads: {
+        Row: {
+          created_at: string | null
+          email: string | null
+          id: string
+          launch_id: string
+          metadata: Json | null
+          name: string | null
+          phone: string | null
+          tags: Json | null
+        }
+        Insert: {
+          created_at?: string | null
+          email?: string | null
+          id?: string
+          launch_id: string
+          metadata?: Json | null
+          name?: string | null
+          phone?: string | null
+          tags?: Json | null
+        }
+        Update: {
+          created_at?: string | null
+          email?: string | null
+          id?: string
+          launch_id?: string
+          metadata?: Json | null
+          name?: string | null
+          phone?: string | null
+          tags?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "leads_launch_id_fkey"
+            columns: ["launch_id"]
+            isOneToOne: false
+            referencedRelation: "launches"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sales: {
+        Row: {
+          amount_cents: number | null
+          created_at: string | null
+          id: string
+          launch_id: string
+          lead_id: string | null
+          payment_method: string | null
+          platform: string | null
+          product_name: string | null
+          status: Database["public"]["Enums"]["sale_status"]
+          transaction_id: string | null
+        }
+        Insert: {
+          amount_cents?: number | null
+          created_at?: string | null
+          id?: string
+          launch_id: string
+          lead_id?: string | null
+          payment_method?: string | null
+          platform?: string | null
+          product_name?: string | null
+          status: Database["public"]["Enums"]["sale_status"]
+          transaction_id?: string | null
+        }
+        Update: {
+          amount_cents?: number | null
+          created_at?: string | null
+          id?: string
+          launch_id?: string
+          lead_id?: string | null
+          payment_method?: string | null
+          platform?: string | null
+          product_name?: string | null
+          status?: Database["public"]["Enums"]["sale_status"]
+          transaction_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sales_launch_id_fkey"
+            columns: ["launch_id"]
+            isOneToOne: false
+            referencedRelation: "launches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sales_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      scheduled_messages: {
+        Row: {
+          copy_asset_id: string
+          error_message: string | null
+          id: string
+          scheduled_for: string
+          sent_at: string | null
+          status: string | null
+          target_group_id: string
+        }
+        Insert: {
+          copy_asset_id: string
+          error_message?: string | null
+          id?: string
+          scheduled_for: string
+          sent_at?: string | null
+          status?: string | null
+          target_group_id: string
+        }
+        Update: {
+          copy_asset_id?: string
+          error_message?: string | null
+          id?: string
+          scheduled_for?: string
+          sent_at?: string | null
+          status?: string | null
+          target_group_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "scheduled_messages_copy_asset_id_fkey"
+            columns: ["copy_asset_id"]
+            isOneToOne: false
+            referencedRelation: "copy_assets"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "scheduled_messages_target_group_id_fkey"
+            columns: ["target_group_id"]
+            isOneToOne: false
+            referencedRelation: "whatsapp_groups"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      whatsapp_groups: {
+        Row: {
+          group_id: string
+          group_name: string | null
+          id: string
+          instance_id: string
+          is_active: boolean | null
+        }
+        Insert: {
+          group_id: string
+          group_name?: string | null
+          id?: string
+          instance_id: string
+          is_active?: boolean | null
+        }
+        Update: {
+          group_id?: string
+          group_name?: string | null
+          id?: string
+          instance_id?: string
+          is_active?: boolean | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "whatsapp_groups_instance_id_fkey"
+            columns: ["instance_id"]
+            isOneToOne: false
+            referencedRelation: "whatsapp_instances"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      whatsapp_instances: {
+        Row: {
+          api_key: string | null
+          created_at: string | null
+          id: string
+          instance_name: string
+          launch_id: string
+          qr_code_url: string | null
+          status: string | null
+        }
+        Insert: {
+          api_key?: string | null
+          created_at?: string | null
+          id?: string
+          instance_name: string
+          launch_id: string
+          qr_code_url?: string | null
+          status?: string | null
+        }
+        Update: {
+          api_key?: string | null
+          created_at?: string | null
+          id?: string
+          instance_name?: string
+          launch_id?: string
+          qr_code_url?: string | null
+          status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "whatsapp_instances_launch_id_fkey"
+            columns: ["launch_id"]
+            isOneToOne: false
+            referencedRelation: "launches"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      workspaces: {
+        Row: {
+          created_at: string | null
+          id: string
+          name: string
+          owner_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          name: string
+          owner_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          name?: string
+          owner_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      is_workspace_member: {
+        Args: { p_workspace_id: string }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      copy_status: "draft" | "review" | "approved"
+      launch_status: "planning" | "active" | "closed"
+      message_type: "text" | "image" | "video" | "document"
+      sale_status:
+        | "waiting_payment"
+        | "paid"
+        | "refunded"
+        | "abandoned_checkout"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +466,16 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      copy_status: ["draft", "review", "approved"],
+      launch_status: ["planning", "active", "closed"],
+      message_type: ["text", "image", "video", "document"],
+      sale_status: [
+        "waiting_payment",
+        "paid",
+        "refunded",
+        "abandoned_checkout",
+      ],
+    },
   },
 } as const
