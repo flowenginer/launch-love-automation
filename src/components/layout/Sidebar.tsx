@@ -12,17 +12,30 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useLocation, useParams } from "react-router-dom";
 
 const navigation = [
-  { name: "Dashboard", icon: Home, href: "/dashboard" },
-  { name: "Leads", icon: Users, href: "/leads" },
-  { name: "Copy", icon: MessageSquare, href: "/copy" },
-  { name: "Analytics", icon: BarChart3, href: "/analytics" },
-  { name: "Configurações", icon: Settings, href: "/settings" },
+  { name: "Dashboard", icon: Home, href: "dashboard" },
+  { name: "Leads", icon: Users, href: "leads" },
+  { name: "Copy", icon: MessageSquare, href: "copy" },
+  { name: "Analytics", icon: BarChart3, href: "analytics" },
+  { name: "Configurações", icon: Settings, href: "settings" },
 ];
 
 export function Sidebar() {
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const location = useLocation();
+  const { id } = useParams();
+  
+  const isActivePage = (href: string) => {
+    return location.pathname.includes(`/${href}`);
+  };
+
+  const handleNavigate = (href: string) => {
+    if (id) {
+      window.location.href = `/launch/${id}/${href}`;
+    }
+  };
 
   return (
     <div className={cn(
@@ -65,17 +78,19 @@ export function Sidebar() {
       {/* Navigation */}
       <nav className="flex-1 px-4 space-y-2">
         {navigation.map((item) => (
-          <span
+          <button
             key={item.name}
+            onClick={() => handleNavigate(item.href)}
             className={cn(
-              "flex items-center px-3 py-3 text-sm font-medium rounded-lg transition-colors cursor-pointer",
+              "w-full flex items-center px-3 py-3 text-sm font-medium rounded-lg transition-colors",
               "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+              isActivePage(item.href) && "bg-sidebar-accent text-sidebar-accent-foreground",
               isCollapsed ? "justify-center" : "justify-start"
             )}
           >
             <item.icon className="h-5 w-5" />
             {!isCollapsed && <span className="ml-3">{item.name}</span>}
-          </span>
+          </button>
         ))}
       </nav>
 
