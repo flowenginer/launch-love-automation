@@ -17,6 +17,10 @@ import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 import LaunchDashboard from "./pages/LaunchDashboard";
 import LaunchCommunication from "./pages/LaunchCommunication";
+import LaunchLayout from "./pages/LaunchLayout";
+import LaunchCopy from "./pages/LaunchCopy";
+import LaunchAnalytics from "./pages/LaunchAnalytics";
+import SelectLaunch from "./pages/SelectLaunch";
 
 const queryClient = new QueryClient();
 
@@ -43,60 +47,20 @@ const App = () => (
             <Route path="/auth" element={<Auth />} />
             <Route path="/" element={
               <ProtectedRoute>
-                <MainLayout>
-                  <Index />
-                </MainLayout>
+                <SelectLaunch />
               </ProtectedRoute>
             } />
-            <Route path="/launches" element={
+            <Route path="/launch/:id" element={
               <ProtectedRoute>
-                <MainLayout>
-                  <Launches />
-                </MainLayout>
+                <LaunchLayout />
               </ProtectedRoute>
-            } />
-            <Route path="/leads" element={
-              <ProtectedRoute>
-                <MainLayout>
-                  <Leads />
-                </MainLayout>
-              </ProtectedRoute>
-            } />
-            <Route path="/communication" element={
-              <ProtectedRoute>
-                <MainLayout>
-                  <Communication />
-                </MainLayout>
-              </ProtectedRoute>
-            } />
-            <Route path="/analytics" element={
-              <ProtectedRoute>
-                <MainLayout>
-                  <Analytics />
-                </MainLayout>
-              </ProtectedRoute>
-            } />
-            <Route path="/settings" element={
-              <ProtectedRoute>
-                <MainLayout>
-                  <Settings />
-                </MainLayout>
-              </ProtectedRoute>
-            } />
-            <Route path="/launch/:id/dashboard" element={
-              <ProtectedRoute>
-                <MainLayout>
-                  <LaunchDashboard />
-                </MainLayout>
-              </ProtectedRoute>
-            } />
-            <Route path="/launch/:id/communication" element={
-              <ProtectedRoute>
-                <MainLayout>
-                  <LaunchCommunication />
-                </MainLayout>
-              </ProtectedRoute>
-            } />
+            }>
+              <Route path="dashboard" element={<LaunchDashboard />} />
+              <Route path="leads" element={<Leads />} />
+              <Route path="copy" element={<LaunchCopy />} />
+              <Route path="analytics" element={<LaunchAnalytics />} />
+              <Route path="settings" element={<Settings />} />
+            </Route>
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

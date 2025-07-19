@@ -14,10 +14,9 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 const navigation = [
-  { name: "Dashboard", icon: Home, href: "/" },
-  { name: "Lançamentos", icon: Rocket, href: "/launches" },
+  { name: "Dashboard", icon: Home, href: "/dashboard" },
   { name: "Leads", icon: Users, href: "/leads" },
-  { name: "Comunicação", icon: MessageSquare, href: "/communication" },
+  { name: "Copy", icon: MessageSquare, href: "/copy" },
   { name: "Analytics", icon: BarChart3, href: "/analytics" },
   { name: "Configurações", icon: Settings, href: "/settings" },
 ];
