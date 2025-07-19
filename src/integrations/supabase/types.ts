@@ -375,7 +375,13 @@ export type Database = {
     Enums: {
       copy_status: "draft" | "review" | "approved"
       launch_status: "planning" | "active" | "closed"
-      message_type: "text" | "image" | "video" | "document"
+      message_type:
+        | "text"
+        | "image"
+        | "video"
+        | "document"
+        | "email"
+        | "whatsapp"
       sale_status:
         | "waiting_payment"
         | "paid"
@@ -510,7 +516,7 @@ export const Constants = {
     Enums: {
       copy_status: ["draft", "review", "approved"],
       launch_status: ["planning", "active", "closed"],
-      message_type: ["text", "image", "video", "document"],
+      message_type: ["text", "image", "video", "document", "email", "whatsapp"],
       sale_status: [
         "waiting_payment",
         "paid",

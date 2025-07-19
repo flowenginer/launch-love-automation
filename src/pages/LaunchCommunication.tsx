@@ -20,8 +20,8 @@ interface CopyAsset {
   title: string;
   content: string;
   media_url: string;
-  type: "text" | "image" | "video" | "document";
-  status: "draft" | "review" | "approved";
+  type: string;
+  status: string;
   created_at: string;
 }
 
@@ -233,17 +233,14 @@ export default function LaunchCommunication() {
 
   if (loading) {
     return (
-      <LaunchLayout launchId={launchId!}>
-        <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-        </div>
-      </LaunchLayout>
+      <div className="flex items-center justify-center h-64">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+      </div>
     );
   }
 
   return (
-    <LaunchLayout launchId={launchId!}>
-      <div className="space-y-6">
+    <div className="space-y-6">
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-2xl font-semibold text-foreground">Hub de Comunicação</h2>
@@ -413,6 +410,5 @@ export default function LaunchCommunication() {
           </DialogContent>
         </Dialog>
       </div>
-    </LaunchLayout>
-  );
+    );
 }

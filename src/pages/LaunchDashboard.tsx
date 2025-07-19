@@ -90,11 +90,10 @@ export default function LaunchDashboard() {
 
   if (loading) {
     return (
-      <LaunchLayout launchId={launchId!}>
-        <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-        </div>
-      </LaunchLayout>
+      <div className="flex items-center justify-center h-64">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+        <span className="ml-2">Carregando...</span>
+      </div>
     );
   }
 
@@ -139,8 +138,7 @@ export default function LaunchDashboard() {
   ];
 
   return (
-    <LaunchLayout launchId={launchId!}>
-      <div className="space-y-6">
+    <div className="space-y-6">
         <div>
           <h2 className="text-2xl font-semibold text-foreground">Dashboard</h2>
           <p className="text-muted-foreground">
@@ -189,6 +187,5 @@ export default function LaunchDashboard() {
           </Card>
         </div>
       </div>
-    </LaunchLayout>
-  );
+    );
 }

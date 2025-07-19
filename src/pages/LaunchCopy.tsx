@@ -82,13 +82,13 @@ export default function LaunchCopy() {
 
     const { error } = await supabase
       .from('copy_assets')
-      .insert([{
+      .insert({
         launch_id: id,
         title: formData.title,
         content,
         type: formData.type,
         status: 'draft'
-      }]);
+      });
 
     if (error) {
       toast({

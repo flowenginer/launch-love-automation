@@ -65,18 +65,17 @@ export function Sidebar() {
       {/* Navigation */}
       <nav className="flex-1 px-4 space-y-2">
         {navigation.map((item) => (
-          <a
+          <span
             key={item.name}
-            href={item.href}
             className={cn(
-              "flex items-center px-3 py-3 text-sm font-medium rounded-lg transition-colors",
+              "flex items-center px-3 py-3 text-sm font-medium rounded-lg transition-colors cursor-pointer",
               "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
               isCollapsed ? "justify-center" : "justify-start"
             )}
           >
             <item.icon className="h-5 w-5" />
             {!isCollapsed && <span className="ml-3">{item.name}</span>}
-          </a>
+          </span>
         ))}
       </nav>
 
