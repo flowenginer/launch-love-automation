@@ -14,7 +14,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 const navigation = [
-  { name: "Dashboard", icon: Home, href: "/", active: true },
+  { name: "Dashboard", icon: Home, href: "/" },
   { name: "Lançamentos", icon: Rocket, href: "/launches" },
   { name: "Leads", icon: Users, href: "/leads" },
   { name: "Comunicação", icon: MessageSquare, href: "/communication" },
@@ -71,9 +71,7 @@ export function Sidebar() {
             href={item.href}
             className={cn(
               "flex items-center px-3 py-3 text-sm font-medium rounded-lg transition-colors",
-              item.active
-                ? "bg-sidebar-accent text-sidebar-primary"
-                : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+              "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
               isCollapsed ? "justify-center" : "justify-start"
             )}
           >

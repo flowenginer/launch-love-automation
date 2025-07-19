@@ -230,6 +230,47 @@ export type Database = {
           },
         ]
       }
+      webhook_integrations: {
+        Row: {
+          created_at: string | null
+          field_mappings: Json
+          id: string
+          is_active: boolean | null
+          launch_id: string
+          name: string
+          permanent_webhook_id: string
+          platform: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          field_mappings: Json
+          id?: string
+          is_active?: boolean | null
+          launch_id: string
+          name: string
+          permanent_webhook_id: string
+          platform?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          field_mappings?: Json
+          id?: string
+          is_active?: boolean | null
+          launch_id?: string
+          name?: string
+          permanent_webhook_id?: string
+          platform?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "webhook_integrations_launch_id_fkey"
+            columns: ["launch_id"]
+            isOneToOne: false
+            referencedRelation: "launches"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       whatsapp_groups: {
         Row: {
           group_id: string
