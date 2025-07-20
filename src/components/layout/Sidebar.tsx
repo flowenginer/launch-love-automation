@@ -18,6 +18,11 @@ const navigation = [
   { name: "Dashboard", icon: Home, href: "dashboard" },
   { name: "Leads", icon: Users, href: "leads" },
   { name: "Copy", icon: MessageSquare, href: "copy" },
+  { name: "Links", icon: Rocket, href: "links" },
+  { name: "Integrações", icon: PlusCircle, href: "integrations" },
+  { name: "Whats-On", icon: MessageSquare, href: "whats-on" },
+  { name: "Equipe", icon: Users, href: "team" },
+  { name: "Lançamentos", icon: Rocket, href: "launches" },
   { name: "Analytics", icon: BarChart3, href: "analytics" },
   { name: "Configurações", icon: Settings, href: "settings" },
 ];
