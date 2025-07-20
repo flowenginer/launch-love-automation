@@ -14,6 +14,62 @@ export type Database = {
   }
   public: {
     Tables: {
+      campaign_links: {
+        Row: {
+          created_at: string
+          destination_url: string
+          generated_url: string
+          id: string
+          launch_id: string
+          purpose: string
+          title: string
+          updated_at: string
+          utm_campaign: string
+          utm_content: string | null
+          utm_medium: string | null
+          utm_source: string
+          utm_term: string | null
+        }
+        Insert: {
+          created_at?: string
+          destination_url: string
+          generated_url: string
+          id?: string
+          launch_id: string
+          purpose: string
+          title: string
+          updated_at?: string
+          utm_campaign: string
+          utm_content?: string | null
+          utm_medium?: string | null
+          utm_source: string
+          utm_term?: string | null
+        }
+        Update: {
+          created_at?: string
+          destination_url?: string
+          generated_url?: string
+          id?: string
+          launch_id?: string
+          purpose?: string
+          title?: string
+          updated_at?: string
+          utm_campaign?: string
+          utm_content?: string | null
+          utm_medium?: string | null
+          utm_source?: string
+          utm_term?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "campaign_links_launch_id_fkey"
+            columns: ["launch_id"]
+            isOneToOne: false
+            referencedRelation: "launches"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       copy_assets: {
         Row: {
           content: string | null

@@ -20,6 +20,7 @@ import LaunchCommunication from "./pages/LaunchCommunication";
 import LaunchLayout from "./pages/LaunchLayout";
 import LaunchCopy from "./pages/LaunchCopy";
 import LaunchAnalytics from "./pages/LaunchAnalytics";
+import LaunchLinks from "./pages/LaunchLinks";
 import SelectLaunch from "./pages/SelectLaunch";
 
 const queryClient = new QueryClient();
@@ -58,6 +59,7 @@ const App = () => (
               <Route path="dashboard" element={<LaunchDashboard />} />
               <Route path="leads" element={<Leads />} />
               <Route path="copy" element={<LaunchCopy />} />
+              <Route path="links" element={<LaunchLinks />} />
               <Route path="analytics" element={<LaunchAnalytics />} />
               <Route path="settings" element={<Settings />} />
             </Route>
