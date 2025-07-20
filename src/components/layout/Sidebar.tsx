@@ -23,9 +23,13 @@ const navigation = [
   { name: "Integrações", icon: PlusCircle, href: "integrations" },
   { name: "Whats-On", icon: MessageSquare, href: "whats-on" },
   { name: "Equipe", icon: Users, href: "team" },
-  { name: "Lançamentos", icon: Rocket, href: "launches" },
   { name: "Analytics", icon: BarChart3, href: "analytics" },
   { name: "Configurações", icon: Settings, href: "settings" },
+];
+
+// Adicionar link para lançamentos na sidebar
+const launchesNavigation = [
+  { name: "Lançamentos", icon: Rocket, href: "/launches" }
 ];
 
 export function Sidebar() {
@@ -87,13 +91,14 @@ export function Sidebar() {
       {/* New Launch Button */}
       <div className="p-4">
         <Button 
+          onClick={() => window.location.href = '/launches'}
           className={cn(
             "w-full bg-gradient-primary hover:opacity-90 text-white shadow-md",
             isCollapsed && "px-2"
           )}
         >
           <PlusCircle className="h-4 w-4" />
-          {!isCollapsed && <span className="ml-2">Novo Lançamento</span>}
+          {!isCollapsed && <span className="ml-2">Ver Lançamentos</span>}
         </Button>
       </div>
 

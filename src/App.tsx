@@ -49,6 +49,11 @@ const App = () => (
         <BrowserRouter>
           <Routes>
             <Route path="/auth" element={<Auth />} />
+            <Route path="/launches" element={
+              <ProtectedRoute>
+                <Launches />
+              </ProtectedRoute>
+            } />
             <Route path="/" element={
               <ProtectedRoute>
                 <SelectLaunch />
