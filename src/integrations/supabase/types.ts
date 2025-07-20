@@ -225,6 +225,44 @@ export type Database = {
           },
         ]
       }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          full_name: string | null
+          id: string
+          role: string
+          updated_at: string
+          workspace_id: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          full_name?: string | null
+          id: string
+          role: string
+          updated_at?: string
+          workspace_id: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          full_name?: string | null
+          id?: string
+          role?: string
+          updated_at?: string
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "profiles_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       sales: {
         Row: {
           amount_cents: number | null
@@ -320,6 +358,50 @@ export type Database = {
             columns: ["target_group_id"]
             isOneToOne: false
             referencedRelation: "whatsapp_groups"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      team_invites: {
+        Row: {
+          created_at: string
+          email: string
+          expires_at: string
+          id: string
+          invite_token: string
+          invited_by: string
+          role: string
+          status: string
+          workspace_id: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          expires_at?: string
+          id?: string
+          invite_token?: string
+          invited_by: string
+          role: string
+          status?: string
+          workspace_id: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          expires_at?: string
+          id?: string
+          invite_token?: string
+          invited_by?: string
+          role?: string
+          status?: string
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "team_invites_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
             referencedColumns: ["id"]
           },
         ]
@@ -461,6 +543,14 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_my_role: {
+        Args: Record<PropertyKey, never>
+        Returns: string
+      }
+      get_my_role_in_workspace: {
+        Args: { p_workspace_id: string }
+        Returns: string
+      }
       is_workspace_member: {
         Args: { p_workspace_id: string }
         Returns: boolean

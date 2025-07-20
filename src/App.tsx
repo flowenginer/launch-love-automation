@@ -23,6 +23,7 @@ import LaunchAnalytics from "./pages/LaunchAnalytics";
 import LaunchLinks from "./pages/LaunchLinks";
 import LaunchIntegrations from "./pages/LaunchIntegrations";
 import IntegrationConfig from "./pages/IntegrationConfig";
+import LaunchTeam from "./pages/LaunchTeam";
 import SelectLaunch from "./pages/SelectLaunch";
 
 const queryClient = new QueryClient();
@@ -64,6 +65,7 @@ const App = () => (
               <Route path="links" element={<LaunchLinks />} />
               <Route path="integrations" element={<LaunchIntegrations />} />
               <Route path="integrations/:integrationId" element={<IntegrationConfig />} />
+              <Route path="team" element={<LaunchTeam />} />
               <Route path="analytics" element={<LaunchAnalytics />} />
               <Route path="settings" element={<Settings />} />
             </Route>
