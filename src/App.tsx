@@ -21,6 +21,8 @@ import LaunchLayout from "./pages/LaunchLayout";
 import LaunchCopy from "./pages/LaunchCopy";
 import LaunchAnalytics from "./pages/LaunchAnalytics";
 import LaunchLinks from "./pages/LaunchLinks";
+import LaunchIntegrations from "./pages/LaunchIntegrations";
+import IntegrationConfig from "./pages/IntegrationConfig";
 import SelectLaunch from "./pages/SelectLaunch";
 
 const queryClient = new QueryClient();
@@ -60,6 +62,8 @@ const App = () => (
               <Route path="leads" element={<Leads />} />
               <Route path="copy" element={<LaunchCopy />} />
               <Route path="links" element={<LaunchLinks />} />
+              <Route path="integrations" element={<LaunchIntegrations />} />
+              <Route path="integrations/:integrationId" element={<IntegrationConfig />} />
               <Route path="analytics" element={<LaunchAnalytics />} />
               <Route path="settings" element={<Settings />} />
             </Route>
