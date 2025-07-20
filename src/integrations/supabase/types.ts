@@ -55,6 +55,44 @@ export type Database = {
           },
         ]
       }
+      copy_notifications: {
+        Row: {
+          copy_asset_id: string
+          created_at: string
+          id: string
+          manager_id: string
+          read_at: string | null
+          status: string
+          type: string
+        }
+        Insert: {
+          copy_asset_id: string
+          created_at?: string
+          id?: string
+          manager_id: string
+          read_at?: string | null
+          status?: string
+          type: string
+        }
+        Update: {
+          copy_asset_id?: string
+          created_at?: string
+          id?: string
+          manager_id?: string
+          read_at?: string | null
+          status?: string
+          type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "copy_notifications_copy_asset_id_fkey"
+            columns: ["copy_asset_id"]
+            isOneToOne: false
+            referencedRelation: "copy_assets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       launches: {
         Row: {
           created_at: string | null

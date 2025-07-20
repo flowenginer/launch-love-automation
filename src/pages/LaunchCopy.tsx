@@ -11,6 +11,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { useCopyNotifications } from "@/hooks/useCopyNotifications";
 
 interface CopyAsset {
   id: string;
@@ -36,6 +37,7 @@ export default function LaunchCopy() {
     preheader: "",
   });
   const { toast } = useToast();
+  const { markAsRead } = useCopyNotifications(id);
 
   useEffect(() => {
     if (id) {
@@ -128,6 +130,11 @@ export default function LaunchCopy() {
         variant: "destructive",
       });
       return;
+    }
+
+    // Se a copy foi aprovada ou rejeitada (voltou para draft), marcar notificação como lida
+    if (status === 'approved' || status === 'draft') {
+      await markAsRead(copyId);
     }
 
     toast({

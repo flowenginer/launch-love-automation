@@ -13,6 +13,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useLocation, useParams } from "react-router-dom";
+import { useCopyNotifications } from "@/hooks/useCopyNotifications";
 
 const navigation = [
   { name: "Dashboard", icon: Home, href: "dashboard" },
@@ -31,6 +32,7 @@ export function Sidebar() {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const location = useLocation();
   const { id } = useParams();
+  const { count } = useCopyNotifications(id);
   
   const isActivePage = (href: string) => {
     return location.pathname.includes(`/${href}`);
@@ -40,6 +42,21 @@ export function Sidebar() {
     if (id) {
       window.location.href = `/launch/${id}/${href}`;
     }
+  };
+
+  const renderNotificationIndicators = (itemName: string) => {
+    if (itemName !== "Copy" || (count.email === 0 && count.whatsapp === 0)) return null;
+
+    return (
+      <div className="flex gap-1 ml-auto">
+        {count.email > 0 && (
+          <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse" title={`${count.email} email(s) em revisão`} />
+        )}
+        {count.whatsapp > 0 && (
+          <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" title={`${count.whatsapp} whatsapp em revisão`} />
+        )}
+      </div>
+    );
   };
 
   return (
@@ -87,14 +104,17 @@ export function Sidebar() {
             key={item.name}
             onClick={() => handleNavigate(item.href)}
             className={cn(
-              "w-full flex items-center px-3 py-3 text-sm font-medium rounded-lg transition-colors",
+              "w-full flex items-center px-3 py-3 text-sm font-medium rounded-lg transition-colors relative",
               "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
               isActivePage(item.href) && "bg-sidebar-accent text-sidebar-accent-foreground",
-              isCollapsed ? "justify-center" : "justify-start"
+              isCollapsed ? "justify-center" : "justify-between"
             )}
           >
-            <item.icon className="h-5 w-5" />
-            {!isCollapsed && <span className="ml-3">{item.name}</span>}
+            <div className="flex items-center">
+              <item.icon className="h-5 w-5" />
+              {!isCollapsed && <span className="ml-3">{item.name}</span>}
+            </div>
+            {!isCollapsed && renderNotificationIndicators(item.name)}
           </button>
         ))}
       </nav>
