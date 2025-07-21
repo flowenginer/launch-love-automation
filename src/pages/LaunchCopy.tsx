@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { Plus, Mail, MessageCircle, Edit3, Send, Check, X } from "lucide-react";
+import { Plus, Mail, MessageCircle, Edit3, Send, Check, X, Eye, Copy } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -28,6 +28,8 @@ export default function LaunchCopy() {
   const [copies, setCopies] = useState<CopyAsset[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedCopy, setSelectedCopy] = useState<CopyAsset | null>(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("email");
   const [formData, setFormData] = useState({
     title: "",
@@ -163,6 +165,93 @@ export default function LaunchCopy() {
     fetchCopies();
   };
 
+  const updateCopy = async (copyId: string, updatedData: { title?: string; content?: string }) => {
+    const { error } = await supabase
+      .from('copy_assets')
+      .update(updatedData)
+      .eq('id', copyId);
+
+    if (error) {
+      toast({
+        title: "Erro",
+        description: "Erro ao atualizar copy",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    toast({
+      title: "Sucesso",
+      description: "Copy atualizada com sucesso!",
+    });
+
+    setIsEditModalOpen(false);
+    setSelectedCopy(null);
+    fetchCopies();
+  };
+
+  const handleEditCopy = (copy: CopyAsset) => {
+    setSelectedCopy(copy);
+    if (copy.type === 'email') {
+      const content = JSON.parse(copy.content || '{}');
+      setFormData({
+        title: copy.title,
+        content: content.body || '',
+        type: copy.type as "email" | "whatsapp",
+        subject: content.subject || '',
+        preheader: content.preheader || '',
+      });
+    } else {
+      setFormData({
+        title: copy.title,
+        content: copy.content || '',
+        type: copy.type as "email" | "whatsapp",
+        subject: '',
+        preheader: '',
+      });
+    }
+    setIsEditModalOpen(true);
+  };
+
+  const handleViewCopy = (copy: CopyAsset) => {
+    setSelectedCopy(copy);
+    setIsViewModalOpen(true);
+  };
+
+  const handleUpdateCopy = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedCopy) return;
+
+    const content = formData.type === 'email' 
+      ? JSON.stringify({
+          subject: formData.subject,
+          preheader: formData.preheader,
+          body: formData.content
+        })
+      : formData.content;
+
+    await updateCopy(selectedCopy.id, {
+      title: formData.title,
+      content,
+    });
+  };
+
+  const copyToClipboard = async (text: string, label: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      toast({
+        title: "Copiado!",
+        description: `${label} copiado para a área de transferência`,
+      });
+    } catch (error) {
+      toast({
+        title: "Erro",
+        description: "Não foi possível copiar para a área de transferência",
+        variant: "destructive",
+      });
+    }
+  };
+
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'draft': return 'bg-gray-100 text-gray-800';
@@ -207,6 +296,26 @@ export default function LaunchCopy() {
           }
         </p>
         <div className="flex justify-end space-x-2 mt-3">
+          {(copy.status === 'draft' || copy.status === 'review') && (
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => handleEditCopy(copy)}
+            >
+              <Edit3 className="h-4 w-4 mr-1" />
+              Editar
+            </Button>
+          )}
+          {copy.status === 'approved' && (
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => handleViewCopy(copy)}
+            >
+              <Eye className="h-4 w-4 mr-1" />
+              Visualizar
+            </Button>
+          )}
           {copy.status === 'draft' && (
             <Button
               size="sm"
@@ -356,6 +465,165 @@ export default function LaunchCopy() {
                 </Button>
               </div>
             </form>
+          </DialogContent>
+        </Dialog>
+
+        {/* Modal de Edição */}
+        <Dialog open={isEditModalOpen} onOpenChange={setIsEditModalOpen}>
+          <DialogContent className="max-w-2xl">
+            <DialogHeader>
+              <DialogTitle>Editar Copy</DialogTitle>
+              <DialogDescription>
+                Edite o conteúdo da sua copy
+              </DialogDescription>
+            </DialogHeader>
+            <form onSubmit={handleUpdateCopy} className="space-y-4">
+              <div>
+                <Label htmlFor="edit-title">Título da Copy</Label>
+                <Input
+                  id="edit-title"
+                  value={formData.title}
+                  onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
+                  placeholder="Ex: E-mail de Boas-Vindas"
+                  required
+                />
+              </div>
+
+              {formData.type === 'email' && (
+                <>
+                  <div>
+                    <Label htmlFor="edit-subject">Assunto</Label>
+                    <Input
+                      id="edit-subject"
+                      value={formData.subject}
+                      onChange={(e) => setFormData(prev => ({ ...prev, subject: e.target.value }))}
+                      placeholder="Assunto do e-mail"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="edit-preheader">Preheader</Label>
+                    <Input
+                      id="edit-preheader"
+                      value={formData.preheader}
+                      onChange={(e) => setFormData(prev => ({ ...prev, preheader: e.target.value }))}
+                      placeholder="Texto de prévia"
+                    />
+                  </div>
+                </>
+              )}
+
+              <div>
+                <Label htmlFor="edit-content">
+                  {formData.type === 'email' ? 'Corpo do E-mail' : 'Mensagem WhatsApp'}
+                </Label>
+                <Textarea
+                  id="edit-content"
+                  value={formData.content}
+                  onChange={(e) => setFormData(prev => ({ ...prev, content: e.target.value }))}
+                  placeholder={formData.type === 'email' 
+                    ? "Digite o conteúdo do e-mail..." 
+                    : "Digite a mensagem do WhatsApp..."
+                  }
+                  rows={8}
+                  required
+                />
+              </div>
+
+              <div className="flex justify-end space-x-2">
+                <Button type="button" variant="outline" onClick={() => setIsEditModalOpen(false)}>
+                  Cancelar
+                </Button>
+                <Button type="submit" className="bg-gradient-primary hover:opacity-90 text-white">
+                  Salvar Alterações
+                </Button>
+              </div>
+            </form>
+          </DialogContent>
+        </Dialog>
+
+        {/* Modal de Visualização */}
+        <Dialog open={isViewModalOpen} onOpenChange={setIsViewModalOpen}>
+          <DialogContent className="max-w-2xl">
+            <DialogHeader>
+              <DialogTitle>Copy Aprovada - {selectedCopy?.title}</DialogTitle>
+              <DialogDescription>
+                Copy aprovada pronta para uso
+              </DialogDescription>
+            </DialogHeader>
+            {selectedCopy && (
+              <div className="space-y-4">
+                {selectedCopy.type === 'email' ? (
+                  <>
+                    {(() => {
+                      const content = JSON.parse(selectedCopy.content || '{}');
+                      return (
+                        <div className="space-y-4">
+                          <div className="flex items-center justify-between p-3 bg-muted rounded-lg">
+                            <div>
+                              <Label className="text-sm font-medium">Assunto</Label>
+                              <p className="text-sm">{content.subject || 'Sem assunto'}</p>
+                            </div>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => copyToClipboard(content.subject || '', 'Assunto')}
+                            >
+                              <Copy className="h-4 w-4" />
+                            </Button>
+                          </div>
+                          
+                          {content.preheader && (
+                            <div className="flex items-center justify-between p-3 bg-muted rounded-lg">
+                              <div>
+                                <Label className="text-sm font-medium">Preheader</Label>
+                                <p className="text-sm">{content.preheader}</p>
+                              </div>
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => copyToClipboard(content.preheader, 'Preheader')}
+                              >
+                                <Copy className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          )}
+                          
+                          <div className="flex items-start justify-between p-3 bg-muted rounded-lg">
+                            <div className="flex-1">
+                              <Label className="text-sm font-medium">Corpo do E-mail</Label>
+                              <div className="text-sm whitespace-pre-wrap mt-2">{content.body || 'Sem conteúdo'}</div>
+                            </div>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => copyToClipboard(content.body || '', 'Corpo do E-mail')}
+                              className="ml-2 flex-shrink-0"
+                            >
+                              <Copy className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        </div>
+                      );
+                    })()}
+                  </>
+                ) : (
+                  <div className="flex items-start justify-between p-3 bg-muted rounded-lg">
+                    <div className="flex-1">
+                      <Label className="text-sm font-medium">Mensagem WhatsApp</Label>
+                      <div className="text-sm whitespace-pre-wrap mt-2">{selectedCopy.content}</div>
+                    </div>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => copyToClipboard(selectedCopy.content, 'Mensagem WhatsApp')}
+                      className="ml-2 flex-shrink-0"
+                    >
+                      <Copy className="h-4 w-4" />
+                    </Button>
+                  </div>
+                )}
+              </div>
+            )}
           </DialogContent>
         </Dialog>
       </div>

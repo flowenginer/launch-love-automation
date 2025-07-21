@@ -1,5 +1,4 @@
 import { Settings as SettingsIcon, Smartphone, Database, Bell, Shield } from "lucide-react";
-import { Header } from "@/components/layout/Header";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -41,18 +40,15 @@ const Settings = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-surface">
-      <Header />
-      
-      <main className="p-6 space-y-6">
-        <div className="space-y-2">
-          <h1 className="text-3xl font-bold text-foreground">
-            Configurações
-          </h1>
-          <p className="text-muted-foreground">
-            Configure sua conta e integrações
-          </p>
-        </div>
+    <div className="space-y-6">
+      <div className="space-y-2">
+        <h1 className="text-3xl font-bold text-foreground">
+          Configurações
+        </h1>
+        <p className="text-muted-foreground">
+          Configure sua conta e integrações
+        </p>
+      </div>
 
         <Tabs defaultValue="whatsapp" className="space-y-6">
           <TabsList className="grid w-full grid-cols-4">
@@ -206,7 +202,6 @@ const Settings = () => {
             </Card>
           </TabsContent>
         </Tabs>
-      </main>
     </div>
   );
 };

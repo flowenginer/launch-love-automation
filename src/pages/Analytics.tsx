@@ -1,22 +1,18 @@
 import { BarChart3, TrendingUp, PieChart, Calendar } from "lucide-react";
-import { Header } from "@/components/layout/Header";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { MetricCard } from "@/components/dashboard/MetricCard";
 
 const Analytics = () => {
   return (
-    <div className="min-h-screen bg-gradient-surface">
-      <Header />
-      
-      <main className="p-6 space-y-6">
-        <div className="space-y-2">
-          <h1 className="text-3xl font-bold text-foreground">
-            Analytics
-          </h1>
-          <p className="text-muted-foreground">
-            Análise detalhada do desempenho dos seus lançamentos
-          </p>
-        </div>
+    <div className="space-y-6">
+      <div className="space-y-2">
+        <h1 className="text-3xl font-bold text-foreground">
+          Analytics
+        </h1>
+        <p className="text-muted-foreground">
+          Análise detalhada do desempenho dos seus lançamentos
+        </p>
+      </div>
 
         {/* Métricas Principais */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -95,7 +91,6 @@ const Analytics = () => {
             </div>
           </CardContent>
         </Card>
-      </main>
     </div>
   );
 };

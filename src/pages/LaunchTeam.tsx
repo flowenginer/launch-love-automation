@@ -172,27 +172,43 @@ export default function LaunchTeam() {
   const fetchCurrentUserRole = async () => {
     if (!id) return;
 
-    const { data: launchData } = await supabase
-      .from('launches')
-      .select('workspace_id')
-      .eq('id', id)
-      .single();
+    try {
+      const { data: launchData } = await supabase
+        .from('launches')
+        .select('workspace_id')
+        .eq('id', id)
+        .single();
 
-    if (!launchData) return;
+      if (!launchData) {
+        console.error('Launch data not found for ID:', id);
+        return;
+      }
 
-    const { data, error } = await supabase
-      .from('profiles')
-      .select('role')
-      .eq('workspace_id', launchData.workspace_id)
-      .eq('id', (await supabase.auth.getUser()).data.user?.id)
-      .single();
+      const { data: userData } = await supabase.auth.getUser();
+      if (!userData.user) {
+        console.error('User not authenticated');
+        return;
+      }
 
-    if (error) {
-      console.error('Erro ao buscar papel do usuário:', error);
-      return;
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('workspace_id', launchData.workspace_id)
+        .eq('id', userData.user.id)
+        .single();
+
+      if (error) {
+        console.error('Erro ao buscar papel do usuário:', error);
+        console.error('Workspace ID:', launchData.workspace_id);
+        console.error('User ID:', userData.user.id);
+        return;
+      }
+
+      console.log('User role found:', data?.role);
+      setCurrentUserRole(data?.role || '');
+    } catch (error) {
+      console.error('Erro inesperado ao buscar papel do usuário:', error);
     }
-
-    setCurrentUserRole(data?.role || '');
   };
 
   const sendInvite = async (e: React.FormEvent) => {
