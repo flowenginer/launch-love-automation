@@ -28,14 +28,14 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
-    // Extract launch_code from URL
+    // Extract permanent_webhook_id from URL
     const url = new URL(req.url);
     const pathParts = url.pathname.split('/');
-    const launchCode = pathParts[pathParts.length - 1];
+    const permanentWebhookId = pathParts[pathParts.length - 1];
     
-    if (!launchCode) {
+    if (!permanentWebhookId) {
       return new Response(
-        JSON.stringify({ error: 'Launch code is required' }),
+        JSON.stringify({ error: 'Webhook ID is required' }),
         { 
           status: 400, 
           headers: { 'Content-Type': 'application/json', ...corsHeaders } 
@@ -43,27 +43,30 @@ const handler = async (req: Request): Promise<Response> => {
       );
     }
 
-    console.log('Processing capture for launch code:', launchCode);
+    console.log('Processing capture for webhook ID:', permanentWebhookId);
 
     const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-    // Find the launch by launch_code
-    const { data: launch, error: launchError } = await supabase
-      .from('launches')
-      .select('id, workspace_id')
-      .eq('launch_code', launchCode)
+    // Find the webhook integration by permanent_webhook_id
+    const { data: integration, error: integrationError } = await supabase
+      .from('webhook_integrations')
+      .select('id, launch_id, launches!inner(id, workspace_id)')
+      .eq('permanent_webhook_id', permanentWebhookId)
+      .eq('is_active', true)
       .single();
 
-    if (launchError || !launch) {
-      console.error('Launch not found:', launchError);
+    if (integrationError || !integration) {
+      console.error('Integration not found:', integrationError);
       return new Response(
-        JSON.stringify({ error: 'Launch not found' }),
+        JSON.stringify({ error: 'Integration not found' }),
         { 
           status: 404, 
           headers: { 'Content-Type': 'application/json', ...corsHeaders } 
         }
       );
     }
+
+    const launch = integration.launches;
 
     // Parse request body
     const captureData: CaptureRequest = await req.json();
