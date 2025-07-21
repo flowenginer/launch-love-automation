@@ -75,7 +75,7 @@ export function Sidebar() {
             <div className="w-8 h-8 rounded-lg bg-gradient-primary flex items-center justify-center">
               <span className="text-white font-bold text-sm">L</span>
             </div>
-            <span className="text-lg font-semibold text-sidebar-foreground">LOVABLE</span>
+            <span className="text-lg font-semibold text-sidebar-foreground">Meu lançamento</span>
           </div>
         )}
         <Button
@@ -91,7 +91,7 @@ export function Sidebar() {
       {/* New Launch Button */}
       <div className="p-4">
         <Button 
-          onClick={() => window.location.href = '/launches'}
+          onClick={() => window.location.href = '/'}
           className={cn(
             "w-full bg-gradient-primary hover:opacity-90 text-white shadow-md",
             isCollapsed && "px-2"

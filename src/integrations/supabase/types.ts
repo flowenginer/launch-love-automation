@@ -151,25 +151,46 @@ export type Database = {
       }
       launches: {
         Row: {
+          cart_close: string | null
+          cart_open: string | null
           created_at: string | null
+          event_end: string | null
+          event_start: string | null
           id: string
+          image_url: string | null
           launch_code: string
+          lead_capture_end: string | null
+          lead_capture_start: string | null
           name: string
           status: Database["public"]["Enums"]["launch_status"] | null
           workspace_id: string
         }
         Insert: {
+          cart_close?: string | null
+          cart_open?: string | null
           created_at?: string | null
+          event_end?: string | null
+          event_start?: string | null
           id?: string
+          image_url?: string | null
           launch_code: string
+          lead_capture_end?: string | null
+          lead_capture_start?: string | null
           name: string
           status?: Database["public"]["Enums"]["launch_status"] | null
           workspace_id: string
         }
         Update: {
+          cart_close?: string | null
+          cart_open?: string | null
           created_at?: string | null
+          event_end?: string | null
+          event_start?: string | null
           id?: string
+          image_url?: string | null
           launch_code?: string
+          lead_capture_end?: string | null
+          lead_capture_start?: string | null
           name?: string
           status?: Database["public"]["Enums"]["launch_status"] | null
           workspace_id?: string

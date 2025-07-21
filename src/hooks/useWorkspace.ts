@@ -16,6 +16,13 @@ interface Launch {
   launch_code: string;
   status: 'planning' | 'active' | 'closed';
   created_at: string;
+  image_url?: string;
+  lead_capture_start?: string;
+  lead_capture_end?: string;
+  event_start?: string;
+  event_end?: string;
+  cart_open?: string;
+  cart_close?: string;
 }
 
 export const useWorkspace = () => {
@@ -65,7 +72,7 @@ export const useWorkspace = () => {
     }
   };
 
-  const createLaunch = async (name: string, launchCode: string) => {
+  const createLaunch = async (name: string, launchCode: string, imageUrl?: string) => {
     if (!workspace) return null;
 
     try {
@@ -75,7 +82,8 @@ export const useWorkspace = () => {
           workspace_id: workspace.id,
           name,
           launch_code: launchCode,
-          status: 'planning'
+          status: 'planning',
+          image_url: imageUrl || null
         })
         .select()
         .single();

@@ -16,7 +16,11 @@ import {
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import monetizzeLogo from "@/assets/integrations/monetizze.svg";
+import hotmartLogo from "@/assets/integrations/hotmart.jpg";
+import eduzzLogo from "@/assets/integrations/eduzz.jpg";
+import monetizzeLogo from "@/assets/integrations/monetizze.jpg";
+import activecampaignLogo from "@/assets/integrations/activecampaign.jpg";
+import manychatLogo from "@/assets/integrations/manychat.jpg";
 
 interface Integration {
   id: string;
@@ -43,6 +47,7 @@ const INTEGRATIONS: Integration[] = [
     name: 'Hotmart',
     description: 'Receba automaticamente dados de vendas da Hotmart',
     icon: ShoppingCart,
+    logo: hotmartLogo,
     status: 'inactive',
     category: 'sales'
   },
@@ -51,6 +56,7 @@ const INTEGRATIONS: Integration[] = [
     name: 'Eduzz',
     description: 'Integre vendas e comissões da plataforma Eduzz',
     icon: Zap,
+    logo: eduzzLogo,
     status: 'inactive',
     category: 'sales'
   },
@@ -68,6 +74,7 @@ const INTEGRATIONS: Integration[] = [
     name: 'ActiveCampaign',
     description: 'Sincronize contatos e automações de email',
     icon: Mail,
+    logo: activecampaignLogo,
     status: 'inactive',
     category: 'marketing'
   },
@@ -76,6 +83,7 @@ const INTEGRATIONS: Integration[] = [
     name: 'Manychat',
     description: 'Integre automações de WhatsApp e Messenger',
     icon: MessageSquare,
+    logo: manychatLogo,
     status: 'inactive',
     category: 'automation'
   },

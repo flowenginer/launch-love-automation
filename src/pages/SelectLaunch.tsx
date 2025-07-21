@@ -20,6 +20,7 @@ export default function SelectLaunch() {
   const [formData, setFormData] = useState({
     name: "",
     launchCode: "",
+    imageUrl: "",
     leadCaptureStart: undefined as Date | undefined,
     leadCaptureEnd: undefined as Date | undefined,
     eventStart: undefined as Date | undefined,
@@ -44,11 +45,22 @@ export default function SelectLaunch() {
       return;
     }
 
-    const newLaunch = await createLaunch(formData.name, formData.launchCode);
+    const newLaunch = await createLaunch(formData.name, formData.launchCode, formData.imageUrl);
     if (newLaunch) {
       toast({
         title: "Sucesso",
         description: "Lançamento criado com sucesso!",
+      });
+      setFormData({
+        name: "",
+        launchCode: "",
+        imageUrl: "",
+        leadCaptureStart: undefined,
+        leadCaptureEnd: undefined,
+        eventStart: undefined,
+        eventEnd: undefined,
+        cartOpen: undefined,
+        cartClose: undefined,
       });
       setIsOpen(false);
       navigate(`/launch/${newLaunch.id}/dashboard`);
@@ -109,6 +121,16 @@ export default function SelectLaunch() {
                       required
                     />
                   </div>
+                </div>
+
+                <div>
+                  <Label htmlFor="imageUrl">URL da Imagem do Lançamento</Label>
+                  <Input
+                    id="imageUrl"
+                    value={formData.imageUrl}
+                    onChange={(e) => setFormData(prev => ({ ...prev, imageUrl: e.target.value }))}
+                    placeholder="https://exemplo.com/imagem.jpg"
+                  />
                 </div>
 
                 <div className="space-y-4">
@@ -298,7 +320,16 @@ export default function SelectLaunch() {
             <h2 className="text-xl font-semibold mb-4">Lançamentos Existentes</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {launches.map((launch) => (
-                <Card key={launch.id} className="hover:shadow-lg transition-shadow cursor-pointer">
+                <Card key={launch.id} className="hover:shadow-lg transition-shadow cursor-pointer" onClick={() => handleLaunchSelect(launch.id)}>
+                  {launch.image_url && (
+                    <div className="aspect-video w-full overflow-hidden rounded-t-lg">
+                      <img 
+                        src={launch.image_url} 
+                        alt={launch.name}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  )}
                   <CardHeader>
                     <CardTitle className="text-lg">{launch.name}</CardTitle>
                     <CardDescription>
@@ -311,7 +342,10 @@ export default function SelectLaunch() {
                         Status: <span className="capitalize">{launch.status}</span>
                       </div>
                       <Button 
-                        onClick={() => handleLaunchSelect(launch.id)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleLaunchSelect(launch.id);
+                        }}
                         className="bg-gradient-primary hover:opacity-90 text-white"
                       >
                         Gerenciar

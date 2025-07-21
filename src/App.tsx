@@ -5,8 +5,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import ProtectedRoute from "@/components/ProtectedRoute";
-import { Sidebar } from "@/components/layout/Sidebar";
-import { Header } from "@/components/layout/Header";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import Launches from "./pages/Launches";
@@ -28,17 +26,6 @@ import SelectLaunch from "./pages/SelectLaunch";
 
 const queryClient = new QueryClient();
 
-const MainLayout = ({ children }: { children: React.ReactNode }) => (
-  <div className="flex h-screen bg-background">
-    <Sidebar />
-    <div className="flex-1 flex flex-col overflow-hidden">
-      <Header />
-      <main className="flex-1 overflow-y-auto p-6">
-        {children}
-      </main>
-    </div>
-  </div>
-);
 
 const App = () => (
   <QueryClientProvider client={queryClient}>

@@ -135,51 +135,60 @@ export default function LaunchLinks() {
   };
 
   const saveLink = async () => {
-    if (!id || !formData.title || !generatedUrl) return;
-
-    const { error } = await supabase
-      .from('campaign_links')
-      .insert({
-        launch_id: id,
-        title: formData.title,
-        purpose: formData.purpose,
-        destination_url: formData.destinationUrl,
-        utm_source: formData.utmSource,
-        utm_medium: formData.utmMedium || null,
-        utm_campaign: formData.utmCampaign,
-        utm_content: formData.utmContent || null,
-        utm_term: formData.utmTerm || null,
-        generated_url: generatedUrl
-      });
-
-    if (error) {
+    if (!id || !formData.title || !generatedUrl) {
       toast({
         title: "Erro",
-        description: "Erro ao salvar link",
+        description: "Preencha todos os campos obrigatórios",
         variant: "destructive",
       });
       return;
     }
 
-    toast({
-      title: "Sucesso",
-      description: "Link salvo com sucesso!",
-    });
+    try {
+      const { error } = await supabase
+        .from('campaign_links')
+        .insert({
+          launch_id: id,
+          title: formData.title,
+          purpose: formData.purpose,
+          destination_url: formData.destinationUrl,
+          utm_source: formData.utmSource,
+          utm_medium: formData.utmMedium || null,
+          utm_campaign: formData.utmCampaign,
+          utm_content: formData.utmContent || null,
+          utm_term: formData.utmTerm || null,
+          generated_url: generatedUrl
+        });
 
-    // Reset form
-    setFormData({
-      title: '',
-      purpose: '',
-      destinationUrl: '',
-      utmSource: '',
-      utmMedium: '',
-      utmCampaign: launch?.launch_code + '_' || '',
-      utmContent: '',
-      utmTerm: ''
-    });
-    setGeneratedUrl('');
-    setStep(1);
-    fetchLinks();
+      if (error) throw error;
+
+      toast({
+        title: "Sucesso",
+        description: "Link salvo com sucesso!",
+      });
+
+      // Reset form
+      setFormData({
+        title: '',
+        purpose: '',
+        destinationUrl: '',
+        utmSource: '',
+        utmMedium: '',
+        utmCampaign: launch?.launch_code + '_' || '',
+        utmContent: '',
+        utmTerm: ''
+      });
+      setGeneratedUrl('');
+      setStep(1);
+      fetchLinks();
+    } catch (error) {
+      console.error('Error saving link:', error);
+      toast({
+        title: "Erro",
+        description: `Erro ao salvar link: ${error.message || 'Erro desconhecido'}`,
+        variant: "destructive",
+      });
+    }
   };
 
   const getPurposeIcon = (purpose: string) => {

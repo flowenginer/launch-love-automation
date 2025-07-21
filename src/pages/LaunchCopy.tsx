@@ -72,49 +72,67 @@ export default function LaunchCopy() {
 
   const handleCreateCopy = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!id) return;
-
-    const content = formData.type === 'email' 
-      ? JSON.stringify({
-          subject: formData.subject,
-          preheader: formData.preheader,
-          body: formData.content
-        })
-      : formData.content;
-
-    const { error } = await supabase
-      .from('copy_assets')
-      .insert({
-        launch_id: id,
-        title: formData.title,
-        content,
-        type: formData.type,
-        status: 'draft'
-      });
-
-    if (error) {
+    if (!id) {
       toast({
         title: "Erro",
-        description: "Erro ao criar copy",
+        description: "ID do lançamento não encontrado",
         variant: "destructive",
       });
       return;
     }
 
-    toast({
-      title: "Sucesso",
-      description: "Copy criada com sucesso!",
-    });
+    if (!formData.title || !formData.content) {
+      toast({
+        title: "Erro",
+        description: "Preencha todos os campos obrigatórios",
+        variant: "destructive",
+      });
+      return;
+    }
 
-    setIsModalOpen(false);
-    setFormData({
-      title: "",
-      content: "",
-      type: "email",
-      subject: "",
-      preheader: "",
-    });
-    fetchCopies();
+    try {
+      const content = formData.type === 'email' 
+        ? JSON.stringify({
+            subject: formData.subject,
+            preheader: formData.preheader,
+            body: formData.content
+          })
+        : formData.content;
+
+      const { error } = await supabase
+        .from('copy_assets')
+        .insert({
+          launch_id: id,
+          title: formData.title,
+          content,
+          type: formData.type,
+          status: 'draft'
+        });
+
+      if (error) throw error;
+
+      toast({
+        title: "Sucesso",
+        description: "Copy criada com sucesso!",
+      });
+
+      setIsModalOpen(false);
+      setFormData({
+        title: "",
+        content: "",
+        type: "email",
+        subject: "",
+        preheader: "",
+      });
+      fetchCopies();
+    } catch (error) {
+      console.error('Error creating copy:', error);
+      toast({
+        title: "Erro",
+        description: `Erro ao criar copy: ${error.message || 'Erro desconhecido'}`,
+        variant: "destructive",
+      });
+    }
   };
 
   const updateCopyStatus = async (copyId: string, status: 'draft' | 'review' | 'approved') => {
