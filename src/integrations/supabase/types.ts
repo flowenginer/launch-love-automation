@@ -576,6 +576,14 @@ export type Database = {
         Args: { p_workspace_id: string }
         Returns: boolean
       }
+      user_can_access_copy_notification: {
+        Args: { copy_asset_id: string }
+        Returns: boolean
+      }
+      user_can_access_launch: {
+        Args: { launch_id: string }
+        Returns: boolean
+      }
     }
     Enums: {
       copy_status: "draft" | "review" | "approved"
