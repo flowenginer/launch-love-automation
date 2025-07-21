@@ -190,12 +190,14 @@ export default function LaunchTeam() {
         return;
       }
 
+      console.log('Fetching role for user:', userData.user.id, 'in workspace:', launchData.workspace_id);
+
       const { data, error } = await supabase
         .from('profiles')
         .select('role')
         .eq('workspace_id', launchData.workspace_id)
         .eq('id', userData.user.id)
-        .single();
+        .maybeSingle(); // Use maybeSingle instead of single
 
       if (error) {
         console.error('Erro ao buscar papel do usuário:', error);
@@ -205,6 +207,7 @@ export default function LaunchTeam() {
       }
 
       console.log('User role found:', data?.role);
+      console.log('Setting current user role to:', data?.role || '');
       setCurrentUserRole(data?.role || '');
     } catch (error) {
       console.error('Erro inesperado ao buscar papel do usuário:', error);
